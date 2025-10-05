@@ -2,7 +2,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/doctrine-orm": "^4.1.0",
@@ -20,6 +20,7 @@
         "symfony/flex": "^2.2",
         "symfony/framework-bundle": "7.2.*",
         "symfony/mercure-bundle": "^0.3.5",
+        "symfony/mime": "7.2.*",
         "symfony/monolog-bundle": "^3.8",
         "symfony/property-access": "7.2.*",
         "symfony/property-info": "7.2.*",
