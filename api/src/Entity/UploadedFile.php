@@ -64,24 +64,29 @@ class UploadedFile
     #[Assert\NotBlank]
     #[Assert\Length(max: 500)]
     #[Groups(['file:read'])]
-    private string $path;
+    private string $path = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     #[Groups(['file:read'])]
-    private string $originalName;
+    private string $originalName = '';
 
     #[ORM\Column(type: Types::STRING, length: 50)]
     #[Assert\NotBlank]
     #[Assert\Choice(choices: ['csv', 'json', 'xlsx', 'ods'])]
     #[Groups(['file:read'])]
-    private string $extension;
+    private string $extension = '';
 
     #[ORM\Column(type: Types::INTEGER)]
     #[Assert\Positive]
     #[Groups(['file:read'])]
-    private int $size;
+    private int $size = 0;
+
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank]
+    #[Groups(['file:read'])]
+    private string $mimeType = '';
 
     #[ORM\Column(type: Types::STRING, length: 32)]
     #[Groups(['file:read'])]
@@ -94,6 +99,9 @@ class UploadedFile
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['file:read'])]
     private \DateTimeImmutable $updatedAt;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $lastError = null;
 
     public function __construct()
     {
@@ -186,6 +194,18 @@ class UploadedFile
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getLastError(): ?string
+    {
+        return $this->lastError;
+    }
+
+    public function setLastError(?string $lastError): self
+    {
+        $this->lastError = $lastError;
+
+        return $this;
     }
 
     #[ORM\PreUpdate]

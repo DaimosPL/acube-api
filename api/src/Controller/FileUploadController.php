@@ -89,7 +89,6 @@ class FileUploadController extends AbstractController
             }
 
             return $this->createSuccessResponse($fileEntity);
-
         } catch (\Exception $e) {
             return $this->createErrorResponse(
                 'An unexpected error occurred during file upload',
