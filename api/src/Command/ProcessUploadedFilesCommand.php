@@ -6,6 +6,7 @@ namespace App\Command;
 
 use App\Repository\UploadedFileRepository;
 use App\Service\Encoder\FileEncoderInterface;
+use App\Service\Notification\NotificationWebhookService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -23,7 +24,8 @@ class ProcessUploadedFilesCommand extends Command
     public function __construct(
         private readonly UploadedFileRepository $uploadedFileRepository,
         private readonly FileEncoderInterface $fileEncoder,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly NotificationWebhookService $notifier
     ) {
         parent::__construct();
     }
@@ -64,6 +66,8 @@ class ProcessUploadedFilesCommand extends Command
                 try {
                     $this->fileEncoder->handleFile($file);
                     $this->uploadedFileRepository->markFileProcessed($file);
+                    // notify external webhook about processed file
+                    $this->notifier->notify($file);
                     $io->success('File ID: ' . $file->getId() . ' processed.');
                 } catch (\Throwable $e) {
                     $this->uploadedFileRepository->markFileFailed($file, $e->getMessage());

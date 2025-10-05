@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
 use App\Controller\FileUploadController;
 use App\Enum\FileStatus;
+use App\Enum\NotificationStatus;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -91,6 +92,10 @@ class UploadedFile
     #[ORM\Column(type: Types::STRING, length: 32)]
     #[Groups(['file:read'])]
     private string $status = FileStatus::NEW->value;
+
+    #[ORM\Column(type: Types::STRING, length: 32, nullable: true)]
+    #[Groups(['file:read'])]
+    private ?string $notificationStatus = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['file:read'])]
@@ -182,6 +187,18 @@ class UploadedFile
     public function setStatus(FileStatus $status): self
     {
         $this->status = $status->value;
+
+        return $this;
+    }
+
+    public function getNotificationStatus(): ?NotificationStatus
+    {
+        return $this->notificationStatus !== null ? NotificationStatus::from($this->notificationStatus) : null;
+    }
+
+    public function setNotificationStatus(?NotificationStatus $notificationStatus): self
+    {
+        $this->notificationStatus = $notificationStatus?->value ?? null;
 
         return $this;
     }

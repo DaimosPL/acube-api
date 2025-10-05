@@ -52,4 +52,16 @@ class UploadedFileRepository extends ServiceEntityRepository
         $file->setLastError($error);
         $this->getEntityManager()->flush();
     }
+
+    public function markNotificationSent(UploadedFile $file): void
+    {
+        $file->setNotificationStatus(\App\Enum\NotificationStatus::SENDED);
+        $this->getEntityManager()->flush();
+    }
+
+    public function setNotificationStatus(UploadedFile $file, \App\Enum\NotificationStatus $status): void
+    {
+        $file->setNotificationStatus($status);
+        $this->getEntityManager()->flush();
+    }
 }
